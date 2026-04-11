@@ -19,7 +19,7 @@ PROMPT = (
     "Cover: "
     "1. Gem and mineral trade news. "
     "2. India export and trade policy, DGFT, RBI, GST. "
-    "3. Forex: USD/INR, EUR/INR, JPY/INR, AUD/INR. "
+    "3. Forex:  Search Google Finance or xe.com RIGHT NOW for live USD/INR, EUR/INR, JPY/INR, AUD/INR rates. Report exact numbers. "
     "4. Etsy, Shopify, eBay platform news. "
     "5. Meta and Instagram ads updates. "
     "6. Luxury and interior design trends. "
