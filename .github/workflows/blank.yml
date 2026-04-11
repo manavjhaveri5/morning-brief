@@ -1,30 +1,56 @@
-name: Manav's Morning Brief
+name: Manav's Morning Briefs
 
 on:
   schedule:
     - cron: "30 4 * * *"
+    - cron: "45 4 * * *"
   workflow_dispatch:
+    inputs:
+      brief_type:
+        description: "Which brief to run"
+        required: true
+        default: "both"
+        type: choice
+        options:
+          - both
+          - world
+          - crystal
 
 jobs:
-  send-brief:
+  world-brief:
+    if: >
+      (github.event_name == 'schedule' && startsWith(github.event.schedule, '30')) ||
+      (github.event_name == 'workflow_dispatch' && (github.event.inputs.brief_type == 'world' || github.event.inputs.brief_type == 'both'))
     runs-on: ubuntu-latest
     timeout-minutes: 10
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
-      - name: Install dependencies
-        run: pip install openai requests
-
-      - name: Run news bot
+      - run: pip install openai requests
+      - name: Run world brief
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python News_bot.py
+
+  crystal-brief:
+    if: >
+      (github.event_name == 'schedule' && startsWith(github.event.schedule, '45')) ||
+      (github.event_name == 'workflow_dispatch' && (github.event.inputs.brief_type == 'crystal' || github.event.inputs.brief_type == 'both'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install openai requests
+      - name: Run crystal brief
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python crystal_brief.py
